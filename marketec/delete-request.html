@@ -3,63 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Deletion Request - Computologic Marketec</title>
+    <title>Data Deletion Request | Computologic Marketec</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 40px auto; padding: 20px; background-color: #f9f9f9; }
-        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid #d9534f; }
-        h1 { color: #d9534f; margin-top: 0; font-size: 24px; }
-        h3 { font-size: 18px; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        p, li { color: #555; font-size: 14px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 700px; margin: 40px auto; padding: 20px; background-color: #f4f7f9; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 6px solid #d9534f; }
+        .dev-name { color: #888; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; font-weight: bold; margin-bottom: 5px; display: block; }
+        h1 { color: #2c3e50; margin-top: 0; font-size: 26px; }
+        h3 { font-size: 18px; color: #d9534f; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        p, li { color: #555; font-size: 15px; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; background-color: #d9534f; color: white; padding: 15px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        button:hover { background-color: #c9302c; }
-        .info-note { font-size: 13px; color: #888; text-align: center; margin-top: 20px; }
-        .compliance-box { background: #f0f4f8; padding: 20px; border-radius: 8px; margin-top: 30px; border: 1px solid #d1d9e0; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; background-color: #d9534f; color: white; padding: 16px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #c9302c; box-shadow: 0 2px 8px rgba(217, 83, 79, 0.3); }
+        .compliance-section { background: #fff9f9; padding: 25px; border-radius: 8px; margin-top: 30px; border: 1px solid #f2dede; }
+        .footer { margin-top: 30px; text-align: center; font-size: 13px; color: #999; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Marketec Data Deletion Request</h1>
-    <p>This page facilitates data deletion requests for the <strong>Marketec Lookup</strong> app, developed by <strong>Computologic</strong>.</p>
+    <span class="dev-name">Developer: Computologic</span>
+    <h1>Marketec Data Deletion Portal</h1>
     
-    <h3>Steps to Request Deletion</h3>
-    <p>To permanently delete your account and all associated data, please follow these steps:</p>
+    <p>This portal allows users of the <strong>Marketec Lookup</strong> mobile application to request the permanent deletion of their account and associated personal data in accordance with Google Play's User Data Policy.</p>
+
+    <h3>How to Request Deletion</h3>
     <ol>
-        <li>Enter your <strong>Client Key</strong> and <strong>Username</strong> in the form below.</li>
-        <li>Click "Submit Request" to generate an email to our support team.</li>
-        <li>Our team will verify the credentials and complete the deletion within 30 days.</li>
+        <li>Provide your <strong>Client Key</strong> and <strong>Username</strong> in the form below.</li>
+        <li>Click <strong>Submit Deletion Request</strong> to email <strong>info@computologic.com</strong>.</li>
+        <li>The team at <strong>Computologic</strong> will verify your identity and process the deletion within <strong>30 days</strong>.</li>
     </ol>
 
     <form action="mailto:info@computologic.com" method="post" enctype="text/plain">
         <div class="form-group">
-            <label for="clientkey">Client Key</label>
-            <input type="text" id="clientkey" name="ClientKey" placeholder="Your business client key" required>
+            <label for="client">Client Key</label>
+            <input type="text" id="client" name="ClientKey" placeholder="Your business client key" required>
         </div>
         <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="Username" placeholder="Enter your login username" required>
+            <label for="user">Username</label>
+            <input type="text" id="user" name="Username" placeholder="Enter your mobile app username" required>
         </div>
         <button type="submit">Submit Deletion Request</button>
     </form>
 
-    <div class="compliance-box">
-        <h3>Data Handling & Retention</h3>
-        <p><strong>What is deleted:</strong> Upon a successful request, <strong>Computologic</strong> will permanently delete:</p>
+    <div class="compliance-section">
+        <h3>Data Removal & Retention</h3>
+        <p><strong>What is deleted:</strong> We store minimal user data. Upon a verified request, <strong>Computologic</strong> will permanently remove:</p>
         <ul>
-            <li>User Authentication Credentials (Username and Password)</li>
-            <li><strong>Location Data:</strong> All stored Precise and Approximate location history</li>
-            <li><strong>User IDs:</strong> Your unique Firestore identifier</li>
-            <li>App Performance & Crash Logs</li>
+            <li><strong>Login Credentials:</strong> Your Username and Password will be completely purged from our Firestore database.</li>
+            <li><strong>User Identifiers:</strong> Your unique User ID and account profile.</li>
+            <li><strong>Location Data:</strong> Any approximate or precise location logs synced to the server.</li>
         </ul>
-        <p><strong>What is kept:</strong> We may retain anonymized transaction records or data required for legal, regulatory, or fraud prevention purposes as per our primary business license agreement.</p>
-        <p><strong>Retention Period:</strong> Manual deletion requests are processed within <strong>30 days</strong>. Once deleted, this data cannot be recovered.</p>
+        <p><strong>Retention Period:</strong> All requested data is permanently scrubbed within 30 days of request receipt. Once the account is deleted, it cannot be recovered.</p>
     </div>
 
-    <div class="info-note">
-        Contact: <strong>info@computologic.com</strong> | Developer: <strong>Computologic</strong>
+    <div class="footer">
+        © 2026 Computologic | Contact: info@computologic.com
     </div>
 </div>
 
