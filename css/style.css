@@ -172,3 +172,50 @@ footer {
         max-width: 100%;
     }
 }
+
+/* Buttons for Marketec page */
+.btn {
+    display: inline-block;
+    background-color: #007acc;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #005f99;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    border: 1px solid #d9534f;
+}
+
+.btn-danger:hover {
+    background-color: #c12e2a;
+}
+
+/* Card container */
+.products .card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Mobile Responsive Tweaks */
+@media (max-width: 600px) {
+    nav a {
+        display: block;
+        margin: 8px 0;
+    }
+
+    .products .card {
+        padding: 10px;
+    }
+}
