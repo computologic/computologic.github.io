@@ -3,41 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Request License / Purchase - Marketec</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Request License / Purchase Marketec</h1>
-        <nav>
-            <a href="index.html">Home</a> |
-            <a href="privacy.html">Privacy Notice</a> |
-            <a href="../index.html">Computologic Home</a>
-        </nav>
-    </header>
 
-    <main>
+<header>
+    <h1>Request License / Purchase Marketec</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy Notice</a>
+        <a href="../index.html">Computologic Home</a>
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <h2>Request a Trial or Purchase a License</h2>
         <p>Fill out the form below to request a trial or purchase a license for Marketec (PC app).</p>
-        <p><strong>Note:</strong> Marketec only collects <em>Company Name</em> (required) and optionally <em>Name</em> and <em>Email</em> for license registration. See our <a href="privacy.html">Privacy Notice</a>.</p>
+        <p><strong>Note:</strong> To process your license request, we <strong>require your email address</strong>. Only Company Name and Email are required. Your name and message/notes are optional. See our <a href="privacy.html">Privacy Notice</a> for details.</p>
+    </section>
 
+    <section>
         <form>
             <label for="company">Company Name (required):</label><br>
             <input type="text" id="company" name="company" required><br>
 
-            <label for="name">Name (optional):</label><br>
+            <label for="name">Your Name (optional):</label><br>
             <input type="text" id="name" name="name"><br>
 
-            <label for="email">Email (optional):</label><br>
-            <input type="email" id="email" name="email"><br>
+            <label for="email">Email (required for license delivery):</label><br>
+            <input type="email" id="email" name="email" required><br>
 
             <label for="message">Message / Notes (optional):</label><br>
             <textarea id="message" name="message" rows="5"></textarea><br>
 
             <button type="submit">Submit Request</button>
         </form>
-    </main>
+    </section>
+</main>
 
-    <footer>
-        &copy; 2026 Computologic. All rights reserved.
-    </footer>
+<footer>
+    &copy; 2026 Computologic. All rights reserved.
+</footer>
+
 </body>
 </html>
