@@ -49,7 +49,21 @@ nav a:hover {
     margin-top: 0;
 }
 
+/* --- Products Section --- */
+.products {
+    margin: 20px 0;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 400px;
+}
+
 /* --- Buttons --- */
+.btn,
 .hero a {
     display: inline-block;
     background-color: #007acc;
@@ -57,11 +71,12 @@ nav a:hover {
     text-decoration: none;
     padding: 10px 18px;
     border-radius: 4px;
-    margin-right: 10px;
+    margin-top: 10px;
     font-weight: bold;
     transition: background-color 0.3s;
 }
 
+.btn:hover,
 .hero a:hover {
     background-color: #005f99;
 }
@@ -147,6 +162,10 @@ footer {
 
     .hero h2 {
         font-size: 20px;
+    }
+
+    .card {
+        max-width: 100%;
     }
 
     form {
