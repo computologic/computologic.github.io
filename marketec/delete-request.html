@@ -5,19 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Deletion Request | Computologic Marketec</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 700px; margin: 40px auto; padding: 20px; background-color: #f4f7f9; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 6px solid #d9534f; }
-        .dev-name { color: #888; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; font-weight: bold; margin-bottom: 5px; display: block; }
-        h1 { color: #2c3e50; margin-top: 0; font-size: 26px; }
-        h3 { font-size: 18px; color: #d9534f; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        p, li { color: #555; font-size: 15px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; background-color: #d9534f; color: white; padding: 16px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #c9302c; box-shadow: 0 2px 8px rgba(217, 83, 79, 0.3); }
-        .compliance-section { background: #fff9f9; padding: 25px; border-radius: 8px; margin-top: 30px; border: 1px solid #f2dede; }
-        .footer { margin-top: 30px; text-align: center; font-size: 13px; color: #999; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 15px; 
+            background-color: #f4f7f9; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            border-top: 6px solid #d9534f; 
+        }
+        .dev-name { 
+            color: #888; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-size: 11px; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            display: block; 
+        }
+        h1 { color: #2c3e50; margin-top: 0; font-size: 24px; }
+        h3 { font-size: 18px; color: #d9534f; margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        p, li { color: #555; font-size: 14px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            background-color: #fafafa;
+        }
+        
+        .verification-box {
+            font-size: 13px; 
+            color: #666; 
+            background: #fff3cd; 
+            padding: 15px; 
+            border-radius: 6px; 
+            border: 1px solid #ffeeba;
+            margin: 20px 0;
+        }
+
+        button { 
+            width: 100%; 
+            background-color: #d9534f; 
+            color: white; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        button:hover { background-color: #c9302c; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            body { margin: 10px auto; padding: 10px; }
+            .container { padding: 20px; }
+            h1 { font-size: 20px; }
+            button { padding: 14px; }
+        }
+
+        .compliance-section { 
+            background: #fff9f9; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 30px; 
+            border: 1px solid #f2dede; 
+        }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #999; }
     </style>
 </head>
 <body>
@@ -26,13 +94,13 @@
     <span class="dev-name">Developer: Computologic</span>
     <h1>Marketec Data Deletion Portal</h1>
     
-    <p>This portal allows users of the <strong>Marketec Lookup</strong> mobile application to request the permanent deletion of their account and associated personal data in accordance with Google Play's User Data Policy.</p>
+    <p>This portal allows users of the <strong>Marketec Lookup</strong> mobile application to request the permanent deletion of their account and associated personal data.</p>
 
     <h3>How to Request Deletion</h3>
     <ol>
-        <li>Provide your <strong>Client Key</strong> and <strong>Username</strong> in the form below.</li>
-        <li>Click <strong>Submit Deletion Request</strong> to email <strong>info@computologic.com</strong>.</li>
-        <li>The team at <strong>Computologic</strong> will verify your identity and process the deletion within <strong>30 days</strong>.</li>
+        <li>Fill out your <strong>Client Key</strong> and <strong>Username</strong> below.</li>
+        <li>Briefly state your <strong>Reason</strong> for deletion.</li>
+        <li>Click <strong>Submit Request</strong> to notify our support team.</li>
     </ol>
 
     <form action="mailto:info@computologic.com" method="post" enctype="text/plain">
@@ -44,18 +112,27 @@
             <label for="user">Username</label>
             <input type="text" id="user" name="Username" placeholder="Enter your mobile app username" required>
         </div>
+        <div class="form-group">
+            <label for="reason">Reason for Deletion</label>
+            <textarea id="reason" name="Reason" rows="2" placeholder="Optional: Let us know why you are requesting deletion"></textarea>
+        </div>
+
+        <div class="verification-box">
+            <strong>Security Verification:</strong> To prevent unauthorized deletions, our team will contact you (or your administrator) to verify this request. Data will only be removed after successful verification.
+        </div>
+
         <button type="submit">Submit Deletion Request</button>
     </form>
 
     <div class="compliance-section">
         <h3>Data Removal & Retention</h3>
-        <p><strong>What is deleted:</strong> We store minimal user data. Upon a verified request, <strong>Computologic</strong> will permanently remove:</p>
+        <p><strong>What is deleted:</strong> Upon a verified request, <strong>Computologic</strong> will permanently remove:</p>
         <ul>
-            <li><strong>Login Credentials:</strong> Your Username and Password will be completely purged from our Firestore database.</li>
+            <li><strong>Login Credentials:</strong> Your Username and Password from our secure system.</li>
             <li><strong>User Identifiers:</strong> Your unique User ID and account profile.</li>
-            <li><strong>Location Data:</strong> Any approximate or precise location logs synced to the server.</li>
+            <li><strong>Sync History:</strong> Personal identifiers linked to your product lookup history.</li>
         </ul>
-        <p><strong>Retention Period:</strong> All requested data is permanently scrubbed within 30 days of request receipt. Once the account is deleted, it cannot be recovered.</p>
+        <p><strong>Processing Time:</strong> Data is permanently scrubbed within 30 days of a verified request. Note: This action cannot be undone.</p>
     </div>
 
     <div class="footer">
