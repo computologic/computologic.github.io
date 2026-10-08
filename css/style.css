@@ -219,3 +219,31 @@ footer {
         padding: 10px;
     }
 }
+/* --- Code Copy Button --- */
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.code-header label {
+    font-weight: 600;
+}
+
+.copy-button {
+    background: #475569;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.copy-button:hover {
+    background: #334155;
+}
