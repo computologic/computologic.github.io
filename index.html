@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Computologic</title>
+    <title>Computologic - Smart Software Solutions</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,6 +15,7 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
         <a href="marketec/index.html">Marketec</a>
+        <a href="tools/vb-to-csharp/index.html">Tools</a>
     </nav>
 </header>
 
@@ -25,17 +26,28 @@
     </section>
 
     <section class="products">
-        <h3>Our Products</h3>
+        <h3>Our Products &amp; Tools</h3>
+        
         <div class="card">
             <h4>Marketec</h4>
-            <p>Inventory & Product Lookup App</p>
+            <p>Inventory &amp; Product Lookup App</p>
             <a class="btn" href="marketec/index.html">View Product</a>
+        </div>
+
+        <div class="card">
+            <h4>VB.NET to C# Converter</h4>
+            <p>Free client-side code conversion utility for developers.</p>
+            <a class="btn" href="tools/vb-to-csharp/index.html">Use Converter</a>
         </div>
     </section>
 </main>
 
 <footer>
-    &copy; 2026 Computologic. All rights reserved.
+    &copy; <span id="year"></span> Computologic. All rights reserved.
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </footer>
 
 </body>
