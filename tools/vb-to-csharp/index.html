@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +26,15 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,.10);
 }
 
-h1 { margin: 0 0 8px; color: #1e293b; }
-p { color: #64748b; line-height: 1.5; }
+h1 {
+    margin: 0 0 8px;
+    color: #1e293b;
+}
+
+p {
+    color: #64748b;
+    line-height: 1.5;
+}
 
 .controls {
     display: flex;
@@ -59,13 +67,33 @@ button {
     transition: .2s;
 }
 
-button:hover { background: #1d4ed8; }
-button.secondary { background: #475569; }
-button.secondary:hover { background: #334155; }
-button.danger { background: #dc2626; }
-button.danger:hover { background: #b91c1c; }
-button.success { background: #15803d; }
-button.success:hover { background: #166534; }
+button:hover {
+    background: #1d4ed8;
+}
+
+button.secondary {
+    background: #475569;
+}
+
+button.secondary:hover {
+    background: #334155;
+}
+
+button.danger {
+    background: #dc2626;
+}
+
+button.danger:hover {
+    background: #b91c1c;
+}
+
+button.success {
+    background: #15803d;
+}
+
+button.success:hover {
+    background: #166534;
+}
 
 .converter-grid {
     display: grid;
@@ -73,7 +101,9 @@ button.success:hover { background: #166534; }
     gap: 20px;
 }
 
-.editor-panel { min-width: 0; }
+.editor-panel {
+    min-width: 0;
+}
 
 .code-header {
     display: flex;
@@ -129,7 +159,10 @@ textarea:focus {
     border-top: 1px solid #e2e8f0;
 }
 
-.info-section h2 { color: #1e293b; }
+.info-section h2 {
+    color: #1e293b;
+}
+
 code {
     background: #f1f5f9;
     padding: 2px 5px;
@@ -137,29 +170,49 @@ code {
 }
 
 @media (max-width: 800px) {
-    .converter-grid { grid-template-columns: 1fr; }
+    .converter-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 600px) {
-    body { padding: 10px; }
-    .container { padding: 16px; }
-    .controls { flex-direction: column; align-items: stretch; }
-    .controls > * { width: 100%; }
-    textarea { height: 350px; }
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls > * {
+        width: 100%;
+    }
+
+    textarea {
+        height: 350px;
+    }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <h1>VB.NET ↔ C# Code Converter</h1>
+
 <p>
 Convert common VB.NET and C# code directly in your browser.
 No code is uploaded to a server.
 </p>
 
 <div class="controls">
+
     <select id="direction">
         <option value="vb-to-cs">VB.NET → C#</option>
         <option value="cs-to-vb">C# → VB.NET</option>
@@ -169,31 +222,45 @@ No code is uploaded to a server.
     <button class="secondary" onclick="swapCode()">⇄ Swap</button>
     <button class="secondary" onclick="formatOutput()">Format Output</button>
     <button class="danger" onclick="clearAll()">Clear</button>
+
 </div>
 
 <div class="converter-grid">
 
     <div class="editor-panel">
+
         <div class="code-header">
             <label id="inputLabel">VB.NET Input</label>
+
             <div class="code-actions">
                 <button class="secondary" onclick="pasteInput()">Paste</button>
             </div>
         </div>
-        <textarea id="inputCode" spellcheck="false"
+
+        <textarea
+            id="inputCode"
+            spellcheck="false"
             placeholder="Paste your VB.NET code here..."></textarea>
+
     </div>
 
     <div class="editor-panel">
+
         <div class="code-header">
             <label id="outputLabel">C# Output</label>
+
             <div class="code-actions">
                 <button class="secondary" onclick="copyOutput()">📋 Copy</button>
                 <button class="success" onclick="downloadOutput()">Download</button>
             </div>
         </div>
-        <textarea id="outputCode" spellcheck="false" readonly
+
+        <textarea
+            id="outputCode"
+            spellcheck="false"
+            readonly
             placeholder="Converted code will appear here..."></textarea>
+
     </div>
 
 </div>
@@ -201,7 +268,9 @@ No code is uploaded to a server.
 <div id="status" class="status"></div>
 
 <div class="info-section">
+
 <h2>Supported Conversions</h2>
+
 <ul>
     <li>Variables, constants and common data types</li>
     <li>If / ElseIf / Else</li>
@@ -210,113 +279,498 @@ No code is uploaded to a server.
     <li>Sub and Function declarations</li>
     <li>Classes, Modules, Structures and Enums</li>
     <li>Properties and common access modifiers</li>
-    <li>Arrays and common generic collection syntax</li>
+    <li>Arrays and generic collection syntax</li>
     <li>Try / Catch / Finally</li>
     <li>Imports ↔ using</li>
-    <li>Common VB.NET operators and literals</li>
-    <li>Comments, strings and basic indentation</li>
+    <li>VB.NET operators and literals</li>
+    <li>VB.NET string constants such as vbCrLf</li>
+    <li>Handles event declarations</li>
+    <li>Comments, strings and automatic indentation</li>
+    <li>Automatic C# semicolon generation</li>
 </ul>
+
 </div>
 
 </div>
 
 <script>
+
+/* ============================================================
+   GENERAL UI
+   ============================================================ */
+
 function setStatus(message, error) {
     const el = document.getElementById("status");
+
     el.textContent = message;
     el.style.color = error ? "#dc2626" : "#64748b";
 }
 
-function convertCode() {
-    const input = document.getElementById("inputCode").value;
-
-    if (!input.trim()) {
-        document.getElementById("outputCode").value = "";
-        setStatus("Nothing to convert.");
-        return;
-    }
-
-    const direction = document.getElementById("direction").value;
-    let output = direction === "vb-to-cs"
-        ? convertVbToCs(input)
-        : convertCsToVb(input);
-
-    document.getElementById("outputCode").value = formatCode(output, direction);
-    updateLabels();
-    setStatus("✓ Conversion completed. Review generated code before using it in production.");
-}
 
 function updateLabels() {
-    const vbToCs = document.getElementById("direction").value === "vb-to-cs";
-    document.getElementById("inputLabel").textContent = vbToCs ? "VB.NET Input" : "C# Input";
-    document.getElementById("outputLabel").textContent = vbToCs ? "C# Output" : "VB.NET Output";
+
+    const vbToCs =
+        document.getElementById("direction").value === "vb-to-cs";
+
+    document.getElementById("inputLabel").textContent =
+        vbToCs ? "VB.NET Input" : "C# Input";
+
+    document.getElementById("outputLabel").textContent =
+        vbToCs ? "C# Output" : "VB.NET Output";
 }
 
-function protectStringsAndComments(text) {
+
+/* ============================================================
+   STRING / COMMENT PROTECTION
+   ============================================================ */
+
+/*
+   Protect quoted strings before applying regex replacements.
+
+   This prevents things such as:
+
+       "Nothing"
+       "AndAlso"
+       "True"
+
+   from being modified inside strings.
+
+   VB comments beginning with ' are handled separately.
+*/
+
+function protectStrings(text, language) {
+
     const tokens = [];
-    const protectedText = text.replace(
-        /"(?:[^"\\]|\\.)*"|'[^\r\n]*/g,
-        function(match) {
-            const key = "__TOKEN_" + tokens.length + "__";
-            tokens.push(match);
-            return key;
+
+    let result = "";
+    let i = 0;
+
+    while (i < text.length) {
+
+        const ch = text[i];
+
+        if (ch === '"') {
+
+            let value = ch;
+            i++;
+
+            while (i < text.length) {
+
+                value += text[i];
+
+                if (text[i] === '"') {
+
+                    /*
+                       VB escapes quotes as "".
+                    */
+                    if (language === "vb" && text[i + 1] === '"') {
+                        value += text[i + 1];
+                        i += 2;
+                        continue;
+                    }
+
+                    i++;
+                    break;
+                }
+
+                /*
+                   C# escaped quote.
+                */
+                if (text[i] === "\\" && i + 1 < text.length) {
+                    value += text[i + 1];
+                    i += 2;
+                    continue;
+                }
+
+                i++;
+            }
+
+            const key = "__STRING_TOKEN_" + tokens.length + "__";
+
+            tokens.push(value);
+            result += key;
+
+            continue;
         }
-    );
+
+        result += ch;
+        i++;
+    }
+
     return {
-        text: protectedText,
+        text: result,
+
         restore: function(value) {
-            return value.replace(/__TOKEN_(\d+)__/g, function(_, n) {
-                return tokens[Number(n)];
-            });
+
+            return value.replace(
+                /__STRING_TOKEN_(\d+)__/g,
+                function(_, n) {
+                    return tokens[Number(n)];
+                }
+            );
         }
     };
 }
 
-function convertVbToCs(vb) {
-    let p = protectStringsAndComments(vb);
-    let s = p.text;
 
-    // Imports
-    s = s.replace(/^\s*Imports\s+(.+)$/gim, "using $1;");
+/* ============================================================
+   COMMON HELPERS
+   ============================================================ */
 
-    // VB comments
-    s = s.replace(/^(\s*)'/gm, "$1//");
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-    // Access modifiers
-    s = s.replace(/\bFriend\b/gi, "internal");
 
-    // Generic collections
-    s = s.replace(/\bList\s*\(\s*Of\s+([^)]+)\)/gi, "List<$1>");
-    s = s.replace(/\bDictionary\s*\(\s*Of\s+([^,]+),\s*([^)]+)\)/gi, "Dictionary<$1, $2>");
-    s = s.replace(/\bIEnumerable\s*\(\s*Of\s+([^)]+)\)/gi, "IEnumerable<$1>");
+function capitalize(value) {
 
-    // Common VB types
+    if (!value) return value;
+
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+
+function convertVbType(type) {
+
+    if (!type) return type;
+
+    let t = type.trim();
+
     const types = {
-        Integer: "int",
-        Long: "long",
-        Short: "short",
-        Byte: "byte",
-        Decimal: "decimal",
-        Double: "double",
-        Single: "float",
-        String: "string",
-        Boolean: "bool",
-        Object: "object",
-        Char: "char",
-        DateTime: "DateTime",
-        Date: "DateTime"
+        "Integer": "int",
+        "Long": "long",
+        "Short": "short",
+        "Byte": "byte",
+        "SByte": "sbyte",
+        "UShort": "ushort",
+        "UInteger": "uint",
+        "ULong": "ulong",
+        "Decimal": "decimal",
+        "Double": "double",
+        "Single": "float",
+        "String": "string",
+        "Boolean": "bool",
+        "Object": "object",
+        "Char": "char",
+        "Date": "DateTime",
+        "DateTime": "DateTime"
     };
 
-    Object.keys(types).forEach(function(type) {
-        const re = new RegExp("\\b" + type + "\\b", "gi");
-        s = s.replace(re, types[type]);
-    });
+    /*
+       Array type:
+       String() -> string[]
+       Integer(,) -> int[,]
+    */
 
-    // Mod / integer division
-    s = s.replace(/\bMod\b/gi, "%");
-    s = s.replace(/\\/g, "/");
+    const arrayMatch = t.match(/^(.*?)(\([,\s]*\))$/);
 
-    // Logical operators
+    if (arrayMatch) {
+
+        const base = convertVbType(arrayMatch[1]);
+        const dimensions = arrayMatch[2];
+
+        const commas =
+            (dimensions.match(/,/g) || []).length;
+
+        return base + "[" + ",".repeat(commas) + "]";
+    }
+
+    const genericMatch = t.match(/^(.+?)\s*\(\s*Of\s+(.+)\)$/i);
+
+    if (genericMatch) {
+
+        const genericName = genericMatch[1].trim();
+        const argumentsText = genericMatch[2];
+
+        const genericMap = {
+            "List": "List",
+            "Dictionary": "Dictionary",
+            "IEnumerable": "IEnumerable",
+            "IList": "IList",
+            "ICollection": "ICollection",
+            "HashSet": "HashSet"
+        };
+
+        const csName =
+            genericMap[genericName] || genericName;
+
+        const args = argumentsText
+            .split(",")
+            .map(function(x) {
+                return convertVbType(x.trim());
+            })
+            .join(", ");
+
+        return csName + "<" + args + ">";
+    }
+
+    return types[t] || t;
+}
+
+
+function convertCsType(type) {
+
+    if (!type) return type;
+
+    let t = type.trim();
+
+    const types = {
+        "int": "Integer",
+        "long": "Long",
+        "short": "Short",
+        "byte": "Byte",
+        "sbyte": "SByte",
+        "ushort": "UShort",
+        "uint": "UInteger",
+        "ulong": "ULong",
+        "decimal": "Decimal",
+        "double": "Double",
+        "float": "Single",
+        "string": "String",
+        "bool": "Boolean",
+        "object": "Object",
+        "char": "Char"
+    };
+
+    const arrayMatch = t.match(/^(.*?)(\[[,\s]*\])$/);
+
+    if (arrayMatch) {
+
+        const base = convertCsType(arrayMatch[1]);
+
+        const brackets = arrayMatch[2];
+
+        const commas =
+            (brackets.match(/,/g) || []).length;
+
+        return base + "(" + ",".repeat(commas) + ")";
+    }
+
+    const genericMatch = t.match(/^([A-Za-z_][\w.]*)<(.+)>$/);
+
+    if (genericMatch) {
+
+        const name = genericMatch[1];
+
+        const args = genericMatch[2]
+            .split(",")
+            .map(function(x) {
+                return convertCsType(x.trim());
+            })
+            .join(", ");
+
+        return name + "(Of " + args + ")";
+    }
+
+    return types[t] || t;
+}
+
+
+/* ============================================================
+   VB PARAMETERS → C#
+   ============================================================ */
+
+function convertVbParameters(args) {
+
+    if (!args.trim()) return "";
+
+    return splitArguments(args)
+        .map(function(arg) {
+
+            arg = arg.trim();
+
+            let modifier = "";
+
+            if (/^ByRef\b/i.test(arg)) {
+                modifier = "ref ";
+            }
+
+            arg = arg.replace(
+                /^(ByVal|ByRef|Optional|ParamArray)\s+/i,
+                ""
+            );
+
+            const match = arg.match(
+                /^([A-Za-z_]\w*)\s+As\s+(.+?)(?:\s*=\s*(.+))?$/i
+            );
+
+            if (!match) return arg;
+
+            const name = match[1];
+            const type = convertVbType(match[2]);
+
+            const defaultValue = match[3];
+
+            return modifier +
+                type +
+                " " +
+                name +
+                (
+                    defaultValue
+                        ? " = " + convertVbExpression(defaultValue)
+                        : ""
+                );
+        })
+        .join(", ");
+}
+
+
+/* ============================================================
+   C# PARAMETERS → VB
+   ============================================================ */
+
+function convertCsParameters(args) {
+
+    if (!args.trim()) return "";
+
+    return splitArguments(args)
+        .map(function(arg) {
+
+            arg = arg.trim();
+
+            let modifier = "";
+
+            if (/^(ref|out)\b/i.test(arg)) {
+                modifier = "ByRef ";
+            }
+
+            arg = arg.replace(
+                /^(ref|out|in)\s+/i,
+                ""
+            );
+
+            const match = arg.match(
+                /^(.+?)\s+([A-Za-z_]\w*)(?:\s*=\s*(.+))?$/
+            );
+
+            if (!match) return arg;
+
+            const type = convertCsType(match[1]);
+            const name = match[2];
+            const defaultValue = match[3];
+
+            return modifier +
+                name +
+                " As " +
+                type +
+                (
+                    defaultValue
+                        ? " = " + convertCsExpression(defaultValue)
+                        : ""
+                );
+        })
+        .join(", ");
+}
+
+
+/*
+   Split comma-separated arguments while respecting:
+   - parentheses
+   - brackets
+   - generic angle brackets
+   - strings
+*/
+
+function splitArguments(text) {
+
+    const result = [];
+
+    let current = "";
+    let depthParen = 0;
+    let depthBracket = 0;
+    let depthAngle = 0;
+    let quote = false;
+
+    for (let i = 0; i < text.length; i++) {
+
+        const ch = text[i];
+
+        if (ch === '"' && text[i - 1] !== "\\") {
+            quote = !quote;
+            current += ch;
+            continue;
+        }
+
+        if (!quote) {
+
+            if (ch === "(") depthParen++;
+            if (ch === ")") depthParen--;
+
+            if (ch === "[") depthBracket++;
+            if (ch === "]") depthBracket--;
+
+            if (ch === "<") depthAngle++;
+            if (ch === ">") depthAngle--;
+
+            if (
+                ch === "," &&
+                depthParen === 0 &&
+                depthBracket === 0 &&
+                depthAngle === 0
+            ) {
+                result.push(current);
+                current = "";
+                continue;
+            }
+        }
+
+        current += ch;
+    }
+
+    if (current.trim()) {
+        result.push(current);
+    }
+
+    return result;
+}
+
+
+/* ============================================================
+   VB EXPRESSIONS → C#
+   ============================================================ */
+
+function convertVbExpression(value) {
+
+    if (!value) return value;
+
+    let s = value.trim();
+
+    /*
+       String concatenation.
+       VB uses &, C# uses +.
+    */
+    s = s.replace(/\s*&\s*/g, " + ");
+
+    /*
+       VB intrinsic constants.
+    */
+    s = s.replace(/\bvbCrLf\b/gi, "Environment.NewLine");
+    s = s.replace(/\bvbNewLine\b/gi, "Environment.NewLine");
+    s = s.replace(/\bvbTab\b/gi, "\\t");
+    s = s.replace(/\bvbCr\b/gi, "\\r");
+    s = s.replace(/\bvbLf\b/gi, "\\n");
+
+    /*
+       Object creation.
+    */
+    s = s.replace(/\bNew\s+/gi, "new ");
+
+    /*
+       Boolean/null literals.
+    */
+    s = s.replace(/\bTrue\b/gi, "true");
+    s = s.replace(/\bFalse\b/gi, "false");
+    s = s.replace(/\bNothing\b/gi, "null");
+
+    /*
+       Me / MyBase.
+    */
+    s = s.replace(/\bMyBase\b/gi, "base");
+    s = s.replace(/\bMe\b/gi, "this");
+
+    /*
+       Operators.
+    */
     s = s.replace(/\bAndAlso\b/gi, "&&");
     s = s.replace(/\bOrElse\b/gi, "||");
     s = s.replace(/\bAnd\b/gi, "&&");
@@ -324,484 +778,2314 @@ function convertVbToCs(vb) {
     s = s.replace(/\bNot\b/gi, "!");
     s = s.replace(/<>/g, "!=");
 
-    // Literals
-    s = s.replace(/\bTrue\b/g, "true");
-    s = s.replace(/\bFalse\b/g, "false");
-    s = s.replace(/\bNothing\b/g, "null");
+    /*
+       VB equality is =.
+       Do not convert >= <= <>.
+    */
+    s = s.replace(/(^|[^<>=!])=([^=]|$)/g, "$1==$2");
 
-    // Me / MyBase
-    s = s.replace(/\bMyBase\b/g, "base");
-    s = s.replace(/\bMe\b/g, "this");
+    /*
+       Mod.
+    */
+    s = s.replace(/\bMod\b/gi, "%");
 
-    // Variable declarations
-    s = s.replace(
-        /\bDim\s+([A-Za-z_]\w*)\s+As\s+([A-Za-z_][\w.<>,\[\]]*)(\s*=\s*(.*))?/gi,
-        function(_, name, type, eq, value) {
-            return type + " " + name + (value ? " = " + value : "") + ";";
-        }
-    );
+    /*
+       Integer division.
+    */
+    s = s.replace(/\\/g, "/");
 
-    // Const
-    s = s.replace(
-        /\bConst\s+([A-Za-z_]\w*)\s+As\s+([A-Za-z_][\w.<>,\[\]]*)\s*=\s*(.+)/gi,
-        "const $2 $1 = $3;"
-    );
-
-    // If / ElseIf / Else
-    s = s.replace(
-        /^\s*ElseIf\s+(.+?)\s+Then\s*$/gim,
-        "else if ($1) {"
-    );
-
-    s = s.replace(
-        /^\s*If\s+(.+?)\s+Then\s*$/gim,
-        "if ($1) {"
-    );
-
-    s = s.replace(/^\s*Else\s*$/gim, "else {");
-
-    // For Each
-    s = s.replace(
-        /^\s*For\s+Each\s+([A-Za-z_]\w*)\s+In\s+(.+)$/gim,
-        "foreach (var $1 in $2) {"
-    );
-
-    // Standard For
-    s = s.replace(
-        /^\s*For\s+([A-Za-z_]\w*)\s*=\s*(.+?)\s+To\s+(.+?)(?:\s+Step\s+(.+))?\s*$/gim,
-        function(_, variable, start, end, step) {
-            let increment = "++" + variable;
-            if (step) {
-                increment = step.trim() === "-1" ? "--" + variable : variable + " += " + step;
-            }
-            return "for (int " + variable + " = " + start + "; " +
-                   variable + " <= " + end + "; " + increment + ") {";
-        }
-    );
-
-    // While
-    s = s.replace(/^\s*While\s+(.+)$/gim, "while ($1) {");
-
-    // Do While / Do Until
-    s = s.replace(/^\s*Do\s+While\s+(.+)$/gim, "while ($1) {");
-    s = s.replace(/^\s*Do\s+Until\s+(.+)$/gim, "while (!($1)) {");
-
-    // Select Case
-    s = s.replace(/^\s*Select\s+Case\s+(.+)$/gim, "switch ($1) {");
-    s = s.replace(/^\s*Case\s+Else\s*$/gim, "default:");
-    s = s.replace(/^\s*Case\s+(.+)$/gim, "case $1:");
-
-    // Try/Catch/Finally
-    s = s.replace(/^\s*Try\s*$/gim, "try {");
-    s = s.replace(
-        /^\s*Catch(?:\s+([A-Za-z_]\w*)\s+As\s+([A-Za-z_]\w*))?\s*$/gim,
-        function(_, name, type) {
-            return type ? "catch (" + type + " " + name + ") {" : "catch (Exception ex) {";
-        }
-    );
-    s = s.replace(/^\s*Finally\s*$/gim, "finally {");
-
-    // Sub
-    s = s.replace(
-        /^\s*(Public|Private|Protected|Friend)?\s*Sub\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*$/gim,
-        function(_, access, name, args) {
-            return (access ? access.toLowerCase() + " " : "") +
-                   "void " + name + "(" + convertVbParameters(args) + ") {";
-        }
-    );
-
-    // Function
-    s = s.replace(
-        /^\s*(Public|Private|Protected|Friend)?\s*Function\s+([A-Za-z_]\w*)\s*\((.*?)\)\s+As\s+([A-Za-z_][\w.<>,\[\]]*)\s*$/gim,
-        function(_, access, name, args, returnType) {
-            return (access ? access.toLowerCase() + " " : "") +
-                   returnType + " " + name + "(" + convertVbParameters(args) + ") {";
-        }
-    );
-
-    // Class / Module / Structure / Enum
-    s = s.replace(/^\s*(Public|Private|Friend|Protected)?\s*Class\s+([A-Za-z_]\w*)/gim,
-        function(_, access, name) {
-            return (access ? access.toLowerCase() + " " : "") + "class " + name + " {";
-        });
-
-    s = s.replace(/^\s*(Public|Private|Friend|Protected)?\s*Module\s+([A-Za-z_]\w*)/gim,
-        function(_, access, name) {
-            return (access ? access.toLowerCase() + " " : "") + "static class " + name + " {";
-        });
-
-    s = s.replace(/^\s*(Public|Private|Friend|Protected)?\s*Structure\s+([A-Za-z_]\w*)/gim,
-        function(_, access, name) {
-            return (access ? access.toLowerCase() + " " : "") + "struct " + name + " {";
-        });
-
-    s = s.replace(/^\s*(Public|Private|Friend|Protected)?\s*Enum\s+([A-Za-z_]\w*)/gim,
-        function(_, access, name) {
-            return (access ? access.toLowerCase() + " " : "") + "enum " + name + " {";
-        });
-
-    // Properties
-    s = s.replace(
-        /^\s*(Public|Private|Protected|Friend)?\s*Property\s+([A-Za-z_]\w*)\s+As\s+([A-Za-z_][\w.<>,\[\]]*)/gim,
-        function(_, access, name, type) {
-            return (access ? access.toLowerCase() + " " : "") +
-                   type + " " + name + " { get; set; }";
-        }
-    );
-
-    // Common conversions
+    /*
+       Conversion functions.
+    */
     s = s.replace(/\bCInt\s*\(/gi, "Convert.ToInt32(");
     s = s.replace(/\bCLng\s*\(/gi, "Convert.ToInt64(");
+    s = s.replace(/\bCShort\s*\(/gi, "Convert.ToInt16(");
+    s = s.replace(/\bCByte\s*\(/gi, "Convert.ToByte(");
     s = s.replace(/\bCDbl\s*\(/gi, "Convert.ToDouble(");
+    s = s.replace(/\bCSng\s*\(/gi, "Convert.ToSingle(");
     s = s.replace(/\bCDec\s*\(/gi, "Convert.ToDecimal(");
     s = s.replace(/\bCBool\s*\(/gi, "Convert.ToBoolean(");
     s = s.replace(/\bCStr\s*\(/gi, "Convert.ToString(");
 
-    // End blocks
-    s = s.replace(/^\s*End\s+(If|For|While|Select|Try|Class|Module|Structure|Enum|Property|Sub|Function)\s*$/gim, "}");
+    /*
+       VB float literal:
+       9.5F is already valid C#.
+       VB Double literal can use R.
+    */
 
-    // Return
-    s = s.replace(/^\s*Return\s+(.+)$/gim, "return $1;");
-
-    // Basic statements that need semicolons
-    s = s.split("\n").map(function(line) {
-        const t = line.trim();
-        if (!t || t.endsWith(";") || t.endsWith("{") || t.endsWith("}") ||
-            t.endsWith(":") || t.startsWith("//") || t.startsWith("using ")) return line;
-        if (/^(if|else if|while|for|foreach|switch|catch|finally)\b/.test(t)) return line;
-        if (/^(case|default):/.test(t)) return line;
-        if (/^(public|private|protected|internal|static)\s+(class|struct|enum)\b/.test(t)) return line;
-        if (/^(return|throw)\b/.test(t) || /^[A-Za-z_]\w*\s*=/.test(t)) return line + ";";
-        return line;
-    }).join("\n");
-
-    return p.restore(s);
+    return s;
 }
 
-function convertVbParameters(args) {
-    if (!args.trim()) return "";
 
-    return args.split(",").map(function(arg) {
-        arg = arg.trim();
+/* ============================================================
+   C# EXPRESSIONS → VB
+   ============================================================ */
 
-        arg = arg.replace(/\bByVal\b/gi, "");
-        arg = arg.replace(/\bByRef\s+/gi, "ref ");
-        arg = arg.replace(/\bOptional\s+/gi, "");
+function convertCsExpression(value) {
 
-        const m = arg.match(/^([A-Za-z_]\w*)\s+As\s+([A-Za-z_][\w.<>,\[\]]*)/i);
-        if (m) return m[2] + " " + m[1];
+    if (!value) return value;
 
-        return arg;
-    }).join(", ");
-}
+    let s = value.trim();
 
-function convertCsToVb(cs) {
-    let p = protectStringsAndComments(cs);
-    let s = p.text;
+    s = s.replace(/\bEnvironment\.NewLine\b/g, "vbCrLf");
 
-    // using
-    s = s.replace(/^\s*using\s+(.+?);?\s*$/gim, "Imports $1");
-
-    // Comments
-    s = s.replace(/^(\s*)\/\//gm, "$1'");
-
-    // Common types
-    s = s.replace(/\bint\b/g, "Integer")
-         .replace(/\blong\b/g, "Long")
-         .replace(/\bshort\b/g, "Short")
-         .replace(/\bbyte\b/g, "Byte")
-         .replace(/\bdecimal\b/g, "Decimal")
-         .replace(/\bdouble\b/g, "Double")
-         .replace(/\bfloat\b/g, "Single")
-         .replace(/\bstring\b/g, "String")
-         .replace(/\bbool\b/g, "Boolean")
-         .replace(/\bobject\b/g, "Object")
-         .replace(/\bchar\b/g, "Char");
-
-    // Generics
-    s = s.replace(/\bList<([^>]+)>/g, "List(Of $1)");
-    s = s.replace(/\bDictionary<([^,]+),\s*([^>]+)>/g, "Dictionary(Of $1, $2)");
-    s = s.replace(/\bIEnumerable<([^>]+)>/g, "IEnumerable(Of $1)");
-
-    // Operators
-    s = s.replace(/&&/g, "AndAlso");
-    s = s.replace(/\|\|/g, "OrElse");
-    s = s.replace(/!=/g, "<>");
-    s = s.replace(/==/g, "=");
-    s = s.replace(/!/g, "Not ");
-
-    // Literals
     s = s.replace(/\btrue\b/g, "True");
     s = s.replace(/\bfalse\b/g, "False");
     s = s.replace(/\bnull\b/g, "Nothing");
 
-    // this/base
     s = s.replace(/\bthis\b/g, "Me");
     s = s.replace(/\bbase\b/g, "MyBase");
 
-    // Variable declarations
-    s = s.replace(
-        /^\s*(?:const\s+)?([A-Za-z_][\w.<>,\[\]]*)\s+([A-Za-z_]\w*)\s*(?:=\s*(.*?))?;\s*$/gim,
-        function(_, type, name, value) {
-            return (value ? "Dim " + name + " As " + type + " = " + value
-                          : "Dim " + name + " As " + type);
-        }
-    );
+    s = s.replace(/&&/g, "AndAlso");
+    s = s.replace(/\|\|/g, "OrElse");
 
-    // if / else
-    s = s.replace(/^\s*if\s*\((.*?)\)\s*\{\s*$/gim, "If $1 Then");
-    s = s.replace(/^\s*else\s+if\s*\((.*?)\)\s*\{\s*$/gim, "ElseIf $1 Then");
-    s = s.replace(/^\s*else\s*\{\s*$/gim, "Else");
+    s = s.replace(/!=/g, "<>");
 
-    // Loops
-    s = s.replace(
-        /^\s*foreach\s*\(\s*(?:var|[A-Za-z_]\w*)\s+([A-Za-z_]\w*)\s+in\s+(.+?)\s*\)\s*\{\s*$/gim,
-        "For Each $1 In $2"
-    );
+    /*
+       C# == → VB =
+    */
+    s = s.replace(/==/g, "=");
 
-    s = s.replace(
-        /^\s*while\s*\((.*?)\)\s*\{\s*$/gim,
-        "While $1"
-    );
+    /*
+       C# !value → VB Not value
+    */
+    s = s.replace(/!\s*(?!=)/g, "Not ");
 
-    // switch
-    s = s.replace(/^\s*switch\s*\((.*?)\)\s*\{\s*$/gim, "Select Case $1");
-    s = s.replace(/^\s*case\s+(.+):\s*$/gim, "Case $1");
-    s = s.replace(/^\s*default:\s*$/gim, "Case Else");
+    /*
+       C# new Type(...) → VB New Type(...)
+    */
+    s = s.replace(/\bnew\s+/gi, "New ");
 
-    // try/catch/finally
-    s = s.replace(/^\s*try\s*\{\s*$/gim, "Try");
-    s = s.replace(
-        /^\s*catch\s*\(\s*([A-Za-z_]\w*)\s+([A-Za-z_]\w*)\s*\)\s*\{\s*$/gim,
-        "Catch $2 As $1"
-    );
-    s = s.replace(/^\s*finally\s*\{\s*$/gim, "Finally");
+    /*
+       C# string concatenation is compatible with VB
+       for many normal expressions, but VB normally uses &.
+    */
+    s = s.replace(/\s*\+\s*/g, " & ");
 
-    // Methods
-    s = s.replace(
-        /^\s*(public|private|protected|internal)?\s*void\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*\{\s*$/gim,
-        function(_, access, name, args) {
-            return (access ? capitalize(access) + " " : "") +
-                   "Sub " + name + "(" + convertCsParameters(args) + ")";
-        }
-    );
+    return s;
+}
 
-    s = s.replace(
-        /^\s*(public|private|protected|internal)?\s*([A-Za-z_]\w*)\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*\{\s*$/gim,
-        function(_, access, type, name, args) {
-            if (/^(if|for|while|switch|catch)$/.test(type)) return _;
-            return (access ? capitalize(access) + " " : "") +
-                   "Function " + name + "(" + convertCsParameters(args) + ") As " + type;
-        }
-    );
 
-    // Classes
-    s = s.replace(
-        /^\s*(public|private|protected|internal)?\s*class\s+([A-Za-z_]\w*)\s*\{\s*$/gim,
-        function(_, access, name) {
-            return (access ? capitalize(access) + " " : "") + "Class " + name;
-        }
-    );
+/* ============================================================
+   VB → C#
+   ============================================================ */
 
-    // return
-    s = s.replace(/^\s*return\s+(.+?);?\s*$/gim, "Return $1");
+function convertVbToCs(vb) {
 
-    // Closing braces: basic contextual conversion
-    const lines = s.split("\n");
-    const out = [];
-    const stack = [];
+    const protectedData = protectStrings(vb, "vb");
 
-    for (let line of lines) {
-        const t = line.trim();
+    let source = protectedData.text;
 
-        if (t === "}") {
-            const block = stack.pop();
+    source = source.replace(/\r\n/g, "\n");
+    source = source.replace(/\r/g, "\n");
 
-            if (block === "if") line = "End If";
-            else if (block === "loop") line = "Next";
-            else if (block === "while") line = "End While";
-            else if (block === "select") line = "End Select";
-            else if (block === "try") line = "End Try";
-            else if (block === "class") line = "End Class";
-            else if (block === "method") line = "End Sub";
-            else line = "End If";
-        } else if (/\bif\b/i.test(t) && t.endsWith("Then")) {
-            stack.push("if");
-        } else if (/^For Each\b/i.test(t) || /^For\b/i.test(t)) {
-            stack.push("loop");
-        } else if (/^While\b/i.test(t)) {
-            stack.push("while");
-        } else if (/^Select Case\b/i.test(t)) {
-            stack.push("select");
-        } else if (/^Try$/i.test(t)) {
-            stack.push("try");
-        } else if (/^Class\b/i.test(t)) {
-            stack.push("class");
-        } else if (/^Sub\b/i.test(t) || /^Function\b/i.test(t)) {
-            stack.push("method");
+    const lines = source.split("\n");
+
+    const output = [];
+
+    let indent = 0;
+
+    /*
+       Track VB blocks so End If / End Sub etc.
+       produce proper C# braces.
+    */
+    const blockStack = [];
+
+    function emit(text, customIndent) {
+
+        if (text === "") {
+            output.push("");
+            return;
         }
 
-        out.push(line);
+        const level =
+            customIndent !== undefined
+                ? customIndent
+                : indent;
+
+        output.push(
+            "    ".repeat(Math.max(0, level)) +
+            text.trim()
+        );
     }
 
-    s = out.join("\n");
+    function closeBlock(expectedTypes) {
 
-    return p.restore(s);
+        if (indent > 0) {
+            indent--;
+        }
+
+        blockStack.pop();
+    }
+
+    for (let rawLine of lines) {
+
+        let line = rawLine.trim();
+
+        if (!line) {
+            output.push("");
+            continue;
+        }
+
+        /*
+           VB single-line comments.
+        */
+        if (line.startsWith("'")) {
+
+            emit("//" + line.substring(1));
+
+            continue;
+        }
+
+        /*
+           Remove line continuation.
+        */
+        if (line.endsWith("_")) {
+
+            line = line.substring(0, line.length - 1).trim();
+
+            if (line) {
+                line += " ";
+            }
+
+            /*
+               Join continuation lines below.
+               Simple preprocessing is performed by
+               collecting them.
+            */
+        }
+
+        /*
+           Remove VB line-number style labels only when obvious.
+        */
+
+        /* ----------------------------------------------------
+           Imports
+           ---------------------------------------------------- */
+
+        let match = line.match(/^Imports\s+(.+)$/i);
+
+        if (match) {
+
+            emit("using " + match[1].trim() + ";");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           Access modifiers
+           ---------------------------------------------------- */
+
+        line = line.replace(/\bFriend\b/gi, "internal");
+
+
+        /* ----------------------------------------------------
+           Namespace
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Namespace\s+(.+)$/i
+        );
+
+        if (match) {
+
+            const access = match[1]
+                ? match[1].toLowerCase() + " "
+                : "";
+
+            emit(access + "namespace " + match[2] + " {");
+
+            indent++;
+            blockStack.push("namespace");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           SUB / EVENT HANDLER
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?(?:Default\s+)?Sub\s+([A-Za-z_]\w*)\s*\((.*?)\)(?:\s+Handles\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase()
+                    : "";
+
+            const name = match[2];
+            const args = convertVbParameters(match[3]);
+
+            /*
+               Handles MyBase.Load is not directly part of
+               a C# method declaration.
+
+               For WinForms-style code, use the normal event
+               handler signature when the event is recognizable.
+            */
+            let finalArgs = args;
+
+            const handles = match[4] || "";
+
+            if (/\.Load\b/i.test(handles)) {
+
+                finalArgs = "object sender, EventArgs e";
+
+            } else if (
+                /\.Click\b/i.test(handles) ||
+                /\.DoubleClick\b/i.test(handles)
+            ) {
+
+                finalArgs = "object sender, EventArgs e";
+
+            }
+
+            emit(
+                (access ? access + " " : "") +
+                "void " +
+                name +
+                "(" +
+                finalArgs +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("method");
+
+            /*
+               Preserve event hookup as a comment rather than
+               silently deleting the information.
+            */
+            if (handles) {
+
+                emit(
+                    "// Handles " +
+                    handles.replace(/\bMyBase\b/gi, "base")
+                );
+            }
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           FUNCTION
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Function\s+([A-Za-z_]\w*)\s*\((.*?)\)\s+As\s+(.+?)(?:\s+Handles\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase()
+                    : "";
+
+            const name = match[2];
+            const args = convertVbParameters(match[3]);
+            const returnType = convertVbType(match[4]);
+
+            emit(
+                (access ? access + " " : "") +
+                returnType +
+                " " +
+                name +
+                "(" +
+                args +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("method");
+
+            if (match[5]) {
+
+                emit("// Handles " + match[5]);
+            }
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CLASS
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?(?:MustInherit\s+)?Class\s+([A-Za-z_]\w*)(?:\s+Inherits\s+(.+?))?(?:\s+Implements\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            let declaration =
+                access + "class " + match[2];
+
+            if (match[3]) {
+                declaration +=
+                    " : " +
+                    match[3];
+            }
+
+            emit(declaration + " {");
+
+            indent++;
+            blockStack.push("class");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           MODULE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Module\s+([A-Za-z_]\w*)$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            emit(
+                access +
+                "static class " +
+                match[2] +
+                " {"
+            );
+
+            indent++;
+            blockStack.push("module");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           STRUCTURE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Structure\s+([A-Za-z_]\w*)$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            emit(
+                access +
+                "struct " +
+                match[2] +
+                " {"
+            );
+
+            indent++;
+            blockStack.push("struct");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ENUM
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Enum\s+([A-Za-z_]\w*)$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            emit(
+                access +
+                "enum " +
+                match[2] +
+                " {"
+            );
+
+            indent++;
+            blockStack.push("enum");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           PROPERTY
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Property\s+([A-Za-z_]\w*)\s+As\s+(.+?)(?:\s*=\s*(.+))?$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            const name = match[2];
+            const type = convertVbType(match[3]);
+
+            emit(
+                access +
+                type +
+                " " +
+                name +
+                " { get; set; }"
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           DIM
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Dim\s+(.+)$/i
+        );
+
+        if (match) {
+
+            const declarations =
+                splitArguments(match[1]);
+
+            declarations.forEach(function(declaration) {
+
+                const m = declaration.match(
+                    /^([A-Za-z_]\w*)\s+As\s+(.+?)(?:\s*=\s*(.+))?$/i
+                );
+
+                if (!m) {
+
+                    emit(
+                        convertVbExpression(declaration) +
+                        ";"
+                    );
+
+                    return;
+                }
+
+                const name = m[1];
+                const type = convertVbType(m[2]);
+                const value = m[3];
+
+                emit(
+                    type +
+                    " " +
+                    name +
+                    (
+                        value !== undefined
+                            ? " = " + convertVbExpression(value)
+                            : ""
+                    ) +
+                    ";"
+                );
+            });
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CONST
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(Public|Private|Protected|internal)\s+)?Const\s+([A-Za-z_]\w*)\s+As\s+(.+?)\s*=\s*(.+)$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? match[1].toLowerCase() + " "
+                    : "";
+
+            emit(
+                access +
+                "const " +
+                convertVbType(match[3]) +
+                " " +
+                match[2] +
+                " = " +
+                convertVbExpression(match[4]) +
+                ";"
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           IF
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^If\s+(.+?)\s+Then$/i
+        );
+
+        if (match) {
+
+            emit(
+                "if (" +
+                convertVbExpression(match[1]) +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("if");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ELSE IF
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^ElseIf\s+(.+?)\s+Then$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit(
+                "} else if (" +
+                convertVbExpression(match[1]) +
+                ") {"
+            );
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ELSE
+           ---------------------------------------------------- */
+
+        if (/^Else$/i.test(line)) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("} else {");
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           FOR EACH
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^For\s+Each\s+([A-Za-z_]\w*)\s+In\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "foreach (var " +
+                match[1] +
+                " in " +
+                convertVbExpression(match[2]) +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("loop");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           NORMAL FOR
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^For\s+([A-Za-z_]\w*)\s*=\s*(.+?)\s+To\s+(.+?)(?:\s+Step\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            const variable = match[1];
+            const start = convertVbExpression(match[2]);
+            const end = convertVbExpression(match[3]);
+            const step = match[4]
+                ? convertVbExpression(match[4])
+                : "1";
+
+            let condition;
+            let increment;
+
+            if (/^-1$/.test(step.trim())) {
+
+                condition =
+                    variable +
+                    " >= " +
+                    end;
+
+                increment =
+                    variable +
+                    "--";
+
+            } else {
+
+                condition =
+                    variable +
+                    " <= " +
+                    end;
+
+                if (step === "1") {
+
+                    increment =
+                        variable +
+                        "++";
+
+                } else {
+
+                    increment =
+                        variable +
+                        " += " +
+                        step;
+                }
+            }
+
+            emit(
+                "for (int " +
+                variable +
+                " = " +
+                start +
+                "; " +
+                condition +
+                "; " +
+                increment +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("loop");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           WHILE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^While\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "while (" +
+                convertVbExpression(match[1]) +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("while");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           DO WHILE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Do\s+While\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "do {"
+            );
+
+            indent++;
+            blockStack.push("do-while:" + convertVbExpression(match[1]));
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           DO UNTIL
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Do\s+Until\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit("do {");
+
+            indent++;
+
+            blockStack.push(
+                "do-until:" +
+                convertVbExpression(match[1])
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           LOOP WHILE / LOOP UNTIL
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Loop\s+While\s+(.+)$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit(
+                "} while (" +
+                convertVbExpression(match[1]) +
+                ");"
+            );
+
+            blockStack.pop();
+
+            continue;
+        }
+
+        match = line.match(
+            /^Loop\s+Until\s+(.+)$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit(
+                "} while (!(" +
+                convertVbExpression(match[1]) +
+                "));"
+            );
+
+            blockStack.pop();
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           SELECT CASE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Select\s+Case\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "switch (" +
+                convertVbExpression(match[1]) +
+                ") {"
+            );
+
+            indent++;
+            blockStack.push("select");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CASE ELSE
+           ---------------------------------------------------- */
+
+        if (/^Case\s+Else$/i.test(line)) {
+
+            emit("default:");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CASE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Case\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "case " +
+                convertVbExpression(match[1]) +
+                ":"
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           TRY
+           ---------------------------------------------------- */
+
+        if (/^Try$/i.test(line)) {
+
+            emit("try {");
+
+            indent++;
+            blockStack.push("try");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CATCH
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Catch(?:\s+([A-Za-z_]\w*)\s+As\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            if (match[1] && match[2]) {
+
+                emit(
+                    "} catch (" +
+                    convertVbType(match[2]) +
+                    " " +
+                    match[1] +
+                    ") {"
+                );
+
+            } else {
+
+                emit("} catch (Exception ex) {");
+            }
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           FINALLY
+           ---------------------------------------------------- */
+
+        if (/^Finally$/i.test(line)) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("} finally {");
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           RETURN
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Return(?:\s+(.+))?$/i
+        );
+
+        if (match) {
+
+            if (match[1]) {
+
+                emit(
+                    "return " +
+                    convertVbExpression(match[1]) +
+                    ";"
+                );
+
+            } else {
+
+                emit("return;");
+            }
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           THROW
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Throw\s+(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "throw " +
+                convertVbExpression(match[1]) +
+                ";"
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           EXIT
+           ---------------------------------------------------- */
+
+        if (/^Exit\s+(Sub|Function)$/i.test(line)) {
+
+            emit("return;");
+
+            continue;
+        }
+
+        if (/^Exit\s+(For|Do|While)$/i.test(line)) {
+
+            emit("break;");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CONTINUE
+           ---------------------------------------------------- */
+
+        if (/^Continue\s+(For|Do|While)$/i.test(line)) {
+
+            emit("continue;");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           END BLOCKS
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^End\s+(If|For|While|Select|Try|Class|Module|Structure|Enum|Sub|Function|Property|Namespace)$/i
+        );
+
+        if (match) {
+
+            const blockType = match[1].toLowerCase();
+
+            /*
+               For "End If", "End Sub", etc.
+               simply close one C# block.
+            */
+
+            indent = Math.max(0, indent - 1);
+
+            emit("}");
+
+            blockStack.pop();
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           NEXT
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^Next(?:\s+[A-Za-z_]\w*)?$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("}");
+
+            blockStack.pop();
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           END CLASS ETC.
+           ---------------------------------------------------- */
+
+        if (
+            /^End\s+(Class|Module|Structure|Enum|Namespace)$/i.test(line)
+        ) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("}");
+
+            blockStack.pop();
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ADDHANDLER
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^AddHandler\s+(.+?),\s*(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "// AddHandler " +
+                match[1] +
+                ", " +
+                match[2]
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           REMOVEHANDLER
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^RemoveHandler\s+(.+?),\s*(.+)$/i
+        );
+
+        if (match) {
+
+            emit(
+                "// RemoveHandler " +
+                match[1] +
+                ", " +
+                match[2]
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           MULTI-LINE COMMENT
+           ---------------------------------------------------- */
+
+        if (/^REM\s+/i.test(line)) {
+
+            emit(
+                "// " +
+                line.replace(/^REM\s+/i, "")
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           EVERYTHING ELSE:
+           executable statement
+        ---------------------------------------------------- */
+
+        let statement =
+            convertVbExpression(line);
+
+        /*
+           VB assignment.
+        */
+        if (
+            statement.endsWith(";") ||
+            statement.endsWith("{") ||
+            statement.endsWith("}") ||
+            statement.endsWith(":") ||
+            statement.startsWith("//")
+        ) {
+
+            emit(statement);
+
+        } else {
+
+            /*
+               Nearly every remaining ordinary VB statement
+               is executable C# code and therefore needs ;.
+
+               This catches:
+                   x = 5
+                   this.Size = ...
+                   ApplyTheme()
+                   timer.Start()
+                   MessageBox.Show(...)
+                   foo.Bar(...)
+                   My.Settings.X = True
+            */
+
+            emit(statement + ";");
+        }
+    }
+
+    return protectedData.restore(
+        output.join("\n")
+    );
 }
 
-function convertCsParameters(args) {
-    if (!args.trim()) return "";
 
-    return args.split(",").map(function(arg) {
-        arg = arg.trim();
-        arg = arg.replace(/\bref\s+/g, "ByRef ");
-        arg = arg.replace(/\bout\s+/g, "ByRef ");
-        arg = arg.replace(/\bin\s+/g, "ByVal ");
+/* ============================================================
+   C# → VB.NET
+   ============================================================ */
 
-        const m = arg.match(/^([A-Za-z_][\w.<>,\[\]]*)\s+([A-Za-z_]\w*)$/);
-        if (m) return m[2] + " As " + m[1];
+function convertCsToVb(cs) {
 
-        return arg;
-    }).join(", ");
+    const protectedData = protectStrings(cs, "cs");
+
+    let source = protectedData.text;
+
+    source = source.replace(/\r\n/g, "\n");
+    source = source.replace(/\r/g, "\n");
+
+    const lines = source.split("\n");
+
+    const output = [];
+
+    let indent = 0;
+
+    const stack = [];
+
+    function emit(text) {
+
+        output.push(
+            "    ".repeat(Math.max(0, indent)) +
+            text.trim()
+        );
+    }
+
+    for (let rawLine of lines) {
+
+        let line = rawLine.trim();
+
+        if (!line) {
+
+            output.push("");
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           COMMENTS
+           ---------------------------------------------------- */
+
+        if (line.startsWith("//")) {
+
+            emit("'" + line.substring(2));
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           USING
+           ---------------------------------------------------- */
+
+        let match = line.match(
+            /^using\s+(.+?);?$/
+        );
+
+        if (match) {
+
+            emit("Imports " + match[1].replace(/;$/, ""));
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           NAMESPACE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal)\s+)?namespace\s+(.+)\s*\{?$/i
+        );
+
+        if (match) {
+
+            emit(
+                "Namespace " +
+                match[2]
+            );
+
+            indent++;
+            stack.push("namespace");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CLASS
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal)\s+)?class\s+([A-Za-z_]\w*)(?:\s*:\s*(.+?))?\s*\{$/i
+        );
+
+        if (match) {
+
+            const access =
+                match[1]
+                    ? capitalize(match[1]) + " "
+                    : "";
+
+            let declaration =
+                access +
+                "Class " +
+                match[2];
+
+            if (match[3]) {
+
+                declaration +=
+                    " Inherits " +
+                    match[3];
+            }
+
+            emit(declaration);
+
+            indent++;
+            stack.push("class");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           STRUCT
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal)\s+)?struct\s+([A-Za-z_]\w*)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                (match[1]
+                    ? capitalize(match[1]) + " "
+                    : "") +
+                "Structure " +
+                match[2]
+            );
+
+            indent++;
+            stack.push("structure");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ENUM
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal)\s+)?enum\s+([A-Za-z_]\w*)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                (match[1]
+                    ? capitalize(match[1]) + " "
+                    : "") +
+                "Enum " +
+                match[2]
+            );
+
+            indent++;
+            stack.push("enum");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           IF
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^if\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                "If " +
+                convertCsExpression(match[1]) +
+                " Then"
+            );
+
+            indent++;
+            stack.push("if");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ELSE IF
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^}\s*else\s+if\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit(
+                "ElseIf " +
+                convertCsExpression(match[1]) +
+                " Then"
+            );
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           ELSE
+           ---------------------------------------------------- */
+
+        if (/^}\s*else\s*\{$/i.test(line)) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("Else");
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           FOREACH
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^foreach\s*\(\s*(?:var|([A-Za-z_]\w*(?:<[^>]+>)?))\s+([A-Za-z_]\w*)\s+in\s+(.+?)\s*\)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                "For Each " +
+                match[2] +
+                " In " +
+                convertCsExpression(match[3])
+            );
+
+            indent++;
+            stack.push("for");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           WHILE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^while\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                "While " +
+                convertCsExpression(match[1])
+            );
+
+            indent++;
+            stack.push("while");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           SWITCH
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^switch\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (match) {
+
+            emit(
+                "Select Case " +
+                convertCsExpression(match[1])
+            );
+
+            indent++;
+            stack.push("select");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CASE
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^case\s+(.+):$/i
+        );
+
+        if (match) {
+
+            emit(
+                "Case " +
+                convertCsExpression(
+                    match[1]
+                )
+            );
+
+            continue;
+        }
+
+
+        if (/^default\s*:$/i.test(line)) {
+
+            emit("Case Else");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           TRY
+           ---------------------------------------------------- */
+
+        if (/^try\s*\{$/i.test(line)) {
+
+            emit("Try");
+
+            indent++;
+            stack.push("try");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CATCH
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^catch\s*\(\s*(.+?)\s+([A-Za-z_]\w*)\s*\)\s*\{$/i
+        );
+
+        if (match) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit(
+                "Catch " +
+                match[2] +
+                " As " +
+                convertCsType(match[1])
+            );
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           FINALLY
+           ---------------------------------------------------- */
+
+        if (/^finally\s*\{$/i.test(line)) {
+
+            indent = Math.max(0, indent - 1);
+
+            emit("Finally");
+
+            indent++;
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           METHODS
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal|static)\s+)*void\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (match) {
+
+            const accessPart =
+                line.match(
+                    /^(public|private|protected|internal|static)/i
+                );
+
+            emit(
+                (accessPart
+                    ? capitalize(accessPart[1]) + " "
+                    : "") +
+                "Sub " +
+                match[2] +
+                "(" +
+                convertCsParameters(match[3]) +
+                ")"
+            );
+
+            indent++;
+            stack.push("sub");
+
+            continue;
+        }
+
+
+        /*
+           Functions.
+        */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal|static)\s+)?([A-Za-z_][\w.<>,\[\]]*)\s+([A-Za-z_]\w*)\s*\((.*?)\)\s*\{$/i
+        );
+
+        if (
+            match &&
+            !/^(if|while|for|switch|catch)$/i.test(match[2])
+        ) {
+
+            emit(
+                (match[1]
+                    ? capitalize(match[1]) + " "
+                    : "") +
+                "Function " +
+                match[3] +
+                "(" +
+                convertCsParameters(match[4]) +
+                ") As " +
+                convertCsType(match[2])
+            );
+
+            indent++;
+            stack.push("function");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           RETURN
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^return(?:\s+(.+?))?;$/i
+        );
+
+        if (match) {
+
+            emit(
+                match[1]
+                    ? "Return " +
+                      convertCsExpression(match[1])
+                    : "Return"
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           VARIABLE DECLARATION
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(const)\s+)?([A-Za-z_][\w.<>,\[\]]*)\s+([A-Za-z_]\w*)\s*(?:=\s*(.+?))?;$/i
+        );
+
+        if (match) {
+
+            const type =
+                convertCsType(match[2]);
+
+            const value =
+                match[4]
+                    ? convertCsExpression(match[4])
+                    : "";
+
+            emit(
+                (match[1] ? "Const " : "Dim ") +
+                match[3] +
+                " As " +
+                type +
+                (
+                    value
+                        ? " = " + value
+                        : ""
+                )
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           PROPERTY
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^(?:(public|private|protected|internal)\s+)?([A-Za-z_][\w.<>,\[\]]*)\s+([A-Za-z_]\w*)\s*\{\s*get;\s*set;\s*\}$/i
+        );
+
+        if (match) {
+
+            emit(
+                (match[1]
+                    ? capitalize(match[1]) + " "
+                    : "") +
+                "Property " +
+                match[3] +
+                " As " +
+                convertCsType(match[2])
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           BREAK / CONTINUE
+           ---------------------------------------------------- */
+
+        if (/^break;$/i.test(line)) {
+
+            emit("Exit For");
+
+            continue;
+        }
+
+        if (/^continue;$/i.test(line)) {
+
+            emit("Continue For");
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           THROW
+           ---------------------------------------------------- */
+
+        match = line.match(
+            /^throw\s+(.+);$/i
+        );
+
+        if (match) {
+
+            emit(
+                "Throw " +
+                convertCsExpression(match[1])
+            );
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           CLOSING BRACE
+           ---------------------------------------------------- */
+
+        if (/^}/.test(line)) {
+
+            indent = Math.max(0, indent - 1);
+
+            const block =
+                stack.pop() || "block";
+
+            switch (block) {
+
+                case "if":
+                    emit("End If");
+                    break;
+
+                case "for":
+                    emit("Next");
+                    break;
+
+                case "while":
+                    emit("End While");
+                    break;
+
+                case "select":
+                    emit("End Select");
+                    break;
+
+                case "try":
+                    emit("End Try");
+                    break;
+
+                case "class":
+                    emit("End Class");
+                    break;
+
+                case "structure":
+                    emit("End Structure");
+                    break;
+
+                case "enum":
+                    emit("End Enum");
+                    break;
+
+                case "namespace":
+                    emit("End Namespace");
+                    break;
+
+                case "sub":
+                    emit("End Sub");
+                    break;
+
+                case "function":
+                    emit("End Function");
+                    break;
+
+                default:
+                    emit("End If");
+                    break;
+            }
+
+            /*
+               If this is "} else ..." the closing brace
+               was already handled by the special cases above.
+            */
+
+            continue;
+        }
+
+
+        /* ----------------------------------------------------
+           NORMAL STATEMENT
+           ---------------------------------------------------- */
+
+        let statement =
+            line.replace(/;\s*$/, "");
+
+        statement =
+            convertCsExpression(statement);
+
+        emit(statement);
+    }
+
+    return protectedData.restore(
+        output.join("\n")
+    );
 }
 
-function capitalize(value) {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-}
+
+/* ============================================================
+   FORMATTER
+   ============================================================ */
 
 function formatCode(code, direction) {
-    let indent = 0;
-    const lines = code.split(/\r?\n/);
+
+    const lines =
+        code.replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .split("\n");
+
     const result = [];
 
-    for (let line of lines) {
-        let t = line.trim();
+    let indent = 0;
+
+    const isCs = direction === "vb-to-cs";
+
+    for (let rawLine of lines) {
+
+        const t = rawLine.trim();
+
         if (!t) {
+
             result.push("");
             continue;
         }
 
-        if (/^}/.test(t) || /^End\s+(If|Sub|Function|Class|Module|Structure|Enum|Try|While|Select|For)/i.test(t)) {
-            indent = Math.max(0, indent - 1);
-        }
+        if (isCs) {
 
-        result.push("    ".repeat(indent) + t);
+            /*
+               Closing C# braces decrease indentation.
+            */
+            if (/^}/.test(t)) {
 
-        if (/[{]$/.test(t) ||
-            /^(If|ElseIf|Else|For Each|For |While |Do|Select Case|Try|Catch|Finally|Class |Module |Structure |Enum |Public Sub|Private Sub|Protected Sub|Friend Sub|Public Function|Private Function|Protected Function|Friend Function)/i.test(t)) {
-            if (!/^Else$/i.test(t)) indent++;
+                indent = Math.max(0, indent - 1);
+            }
+
+            result.push(
+                "    ".repeat(indent) +
+                t
+            );
+
+            /*
+               Opening brace.
+            */
+            if (/\{\s*$/.test(t) &&
+                !/^\/\//.test(t)) {
+
+                indent++;
+            }
+
+            /*
+               Handles } else { on one line.
+            */
+            if (/^}\s*else\b/.test(t)) {
+
+                indent++;
+            }
+
+        } else {
+
+            /*
+               VB End blocks decrease indentation before
+               the line is emitted.
+            */
+            if (
+                /^End\s+(If|For|While|Select|Try|Class|Module|Structure|Enum|Sub|Function|Property|Namespace)\b/i.test(t) ||
+                /^Next\b/i.test(t)
+            ) {
+
+                indent = Math.max(0, indent - 1);
+            }
+
+            result.push(
+                "    ".repeat(indent) +
+                t
+            );
+
+            /*
+               Opening VB blocks.
+            */
+            if (
+                /^If\b.+\bThen$/i.test(t) ||
+                /^ElseIf\b.+\bThen$/i.test(t) ||
+                /^Else$/i.test(t) ||
+                /^For\b/i.test(t) ||
+                /^While\b/i.test(t) ||
+                /^Do\b/i.test(t) ||
+                /^Select Case\b/i.test(t) ||
+                /^Try$/i.test(t) ||
+                /^Catch\b/i.test(t) ||
+                /^Finally$/i.test(t) ||
+                /^(Public|Private|Protected|Friend|internal)?\s*(Class|Module|Structure|Enum|Sub|Function|Namespace)\b/i.test(t)
+            ) {
+
+                /*
+                   Else/ElseIf does not need an additional level
+                   beyond the level already established by the
+                   surrounding If block.
+                */
+                if (
+                    !/^Else$/i.test(t) &&
+                    !/^ElseIf\b/i.test(t) &&
+                    !/^Catch\b/i.test(t) &&
+                    !/^Finally$/i.test(t)
+                ) {
+                    indent++;
+                }
+            }
         }
     }
 
     return result.join("\n");
 }
 
-function copyOutput() {
-    const output = document.getElementById("outputCode").value;
 
-    if (!output) {
-        setStatus("There is no output code to copy.", true);
+/* ============================================================
+   CONVERT BUTTON
+   ============================================================ */
+
+function convertCode() {
+
+    const input =
+        document.getElementById("inputCode").value;
+
+    if (!input.trim()) {
+
+        document.getElementById("outputCode").value = "";
+
+        setStatus("Nothing to convert.");
+
         return;
     }
 
-    navigator.clipboard.writeText(output).then(function() {
-        setStatus("✓ Code copied to clipboard.");
-    }).catch(function() {
-        const box = document.getElementById("outputCode");
-        box.focus();
-        box.select();
-        document.execCommand("copy");
-        setStatus("✓ Code copied to clipboard.");
-    });
+    const direction =
+        document.getElementById("direction").value;
+
+    let output;
+
+    try {
+
+        output =
+            direction === "vb-to-cs"
+                ? convertVbToCs(input)
+                : convertCsToVb(input);
+
+        output =
+            formatCode(output, direction);
+
+        document.getElementById("outputCode").value =
+            output;
+
+        updateLabels();
+
+        setStatus(
+            "✓ Conversion completed. Review generated code before using it in production."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("outputCode").value = "";
+
+        setStatus(
+            "Conversion error: " +
+            error.message,
+            true
+        );
+    }
 }
+
+
+/* ============================================================
+   COPY
+   ============================================================ */
+
+function copyOutput() {
+
+    const output =
+        document.getElementById("outputCode").value;
+
+    if (!output) {
+
+        setStatus(
+            "There is no output code to copy.",
+            true
+        );
+
+        return;
+    }
+
+    navigator.clipboard.writeText(output)
+        .then(function() {
+
+            setStatus(
+                "✓ Code copied to clipboard."
+            );
+
+        })
+        .catch(function() {
+
+            const box =
+                document.getElementById("outputCode");
+
+            box.focus();
+            box.select();
+
+            document.execCommand("copy");
+
+            setStatus(
+                "✓ Code copied to clipboard."
+            );
+        });
+}
+
+
+/* ============================================================
+   PASTE
+   ============================================================ */
 
 function pasteInput() {
-    navigator.clipboard.readText().then(function(text) {
-        document.getElementById("inputCode").value = text;
-        setStatus("Code pasted.");
-    }).catch(function() {
-        setStatus("Browser blocked clipboard access. Paste manually with Ctrl+V.", true);
-    });
+
+    navigator.clipboard.readText()
+        .then(function(text) {
+
+            document.getElementById("inputCode").value =
+                text;
+
+            setStatus("Code pasted.");
+
+        })
+        .catch(function() {
+
+            setStatus(
+                "Browser blocked clipboard access. Paste manually with Ctrl+V.",
+                true
+            );
+        });
 }
 
+
+/* ============================================================
+   CLEAR
+   ============================================================ */
+
 function clearAll() {
+
     document.getElementById("inputCode").value = "";
     document.getElementById("outputCode").value = "";
+
     setStatus("");
 }
 
+
+/* ============================================================
+   SWAP
+   ============================================================ */
+
 function swapCode() {
-    const input = document.getElementById("inputCode");
-    const output = document.getElementById("outputCode");
-    const direction = document.getElementById("direction");
+
+    const input =
+        document.getElementById("inputCode");
+
+    const output =
+        document.getElementById("outputCode");
+
+    const direction =
+        document.getElementById("direction");
 
     const oldInput = input.value;
+
     input.value = output.value;
     output.value = oldInput;
 
-    direction.value = direction.value === "vb-to-cs" ? "cs-to-vb" : "vb-to-cs";
+    direction.value =
+        direction.value === "vb-to-cs"
+            ? "cs-to-vb"
+            : "vb-to-cs";
+
     updateLabels();
 
     setStatus("Languages swapped.");
 }
 
+
+/* ============================================================
+   FORMAT OUTPUT
+   ============================================================ */
+
 function formatOutput() {
-    const output = document.getElementById("outputCode");
+
+    const output =
+        document.getElementById("outputCode");
 
     if (!output.value.trim()) {
-        setStatus("There is no output to format.", true);
+
+        setStatus(
+            "There is no output to format.",
+            true
+        );
+
         return;
     }
 
-    output.value = formatCode(output.value, document.getElementById("direction").value);
+    output.value =
+        formatCode(
+            output.value,
+            document.getElementById("direction").value
+        );
+
     setStatus("✓ Output formatted.");
 }
 
+
+/* ============================================================
+   DOWNLOAD
+   ============================================================ */
+
 function downloadOutput() {
-    const output = document.getElementById("outputCode").value;
+
+    const output =
+        document.getElementById("outputCode").value;
 
     if (!output.trim()) {
-        setStatus("There is no output to download.", true);
+
+        setStatus(
+            "There is no output to download.",
+            true
+        );
+
         return;
     }
 
-    const vbToCs = document.getElementById("direction").value === "vb-to-cs";
-    const extension = vbToCs ? ".cs" : ".vb";
-    const filename = vbToCs ? "converted-code.cs" : "converted-code.vb";
+    const vbToCs =
+        document.getElementById("direction").value === "vb-to-cs";
 
-    const blob = new Blob([output], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
+    const extension =
+        vbToCs ? ".cs" : ".vb";
 
-    const a = document.createElement("a");
+    const filename =
+        vbToCs
+            ? "converted-code.cs"
+            : "converted-code.vb";
+
+    const blob =
+        new Blob(
+            [output],
+            {
+                type: "text/plain;charset=utf-8"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
     a.href = url;
     a.download = filename;
+
     document.body.appendChild(a);
+
     a.click();
+
     a.remove();
 
     URL.revokeObjectURL(url);
-    setStatus("✓ File downloaded as " + filename);
+
+    setStatus(
+        "✓ File downloaded as " +
+        filename
+    );
 }
 
-document.getElementById("direction").addEventListener("change", updateLabels);
 
-document.getElementById("inputCode").addEventListener("keydown", function(e) {
-    if (e.key === "Tab") {
-        e.preventDefault();
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-        this.value = this.value.substring(0, start) + "    " +
-                     this.value.substring(end);
-        this.selectionStart = this.selectionEnd = start + 4;
-    }
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
 
-    if (e.ctrlKey && e.key === "Enter") {
-        convertCode();
-    }
-});
+document
+    .getElementById("direction")
+    .addEventListener(
+        "change",
+        updateLabels
+    );
+
+
+document
+    .getElementById("inputCode")
+    .addEventListener(
+        "keydown",
+        function(e) {
+
+            /*
+               Tab inserts four spaces.
+            */
+            if (e.key === "Tab") {
+
+                e.preventDefault();
+
+                const start =
+                    this.selectionStart;
+
+                const end =
+                    this.selectionEnd;
+
+                this.value =
+                    this.value.substring(0, start) +
+                    "    " +
+                    this.value.substring(end);
+
+                this.selectionStart =
+                    this.selectionEnd =
+                    start + 4;
+            }
+
+            /*
+               Ctrl + Enter converts.
+            */
+            if (
+                e.ctrlKey &&
+                e.key === "Enter"
+            ) {
+
+                e.preventDefault();
+
+                convertCode();
+            }
+        }
+    );
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
 
 updateLabels();
+
 </script>
 
 </body>
 </html>
+```
