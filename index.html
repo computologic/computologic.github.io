@@ -2,53 +2,496 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Computologic - Smart Software Solutions</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+
+    <title>VB.NET to C# Converter - Computologic Tools</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+
+        p {
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        textarea {
+            width: 100%;
+            height: 320px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            resize: vertical;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            align-items: center;
+        }
+
+        button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        select {
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            font-weight: 500;
+        }
+
+        /* Output Code Header */
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .code-header label {
+            font-weight: 600;
+        }
+
+        /* Copy Button */
+        .code-header .copy-button {
+            background: #475569;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .code-header .copy-button:hover {
+            background: #334155;
+        }
+
+        .info-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            line-height: 1.6;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 18px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls select,
+            .controls button {
+                width: 100%;
+            }
+
+            .code-header .copy-button {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<header>
-    <h1>Computologic</h1>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="marketec/index.html">Marketec</a>
-        <a href="tools/vb-to-csharp/index.html">Tools</a>
-    </nav>
-</header>
+<div class="container">
 
-<main>
-    <section class="hero">
-        <h2>Smart Software Solutions for Businesses</h2>
-        <p>We create simple and efficient apps for your business needs.</p>
-    </section>
+    <h1>VB.NET &amp; C# Code Converter</h1>
 
-    <section class="products">
-        <h3>Our Products &amp; Tools</h3>
-        
-        <div class="card">
-            <h4>Marketec</h4>
-            <p>Inventory &amp; Product Lookup App</p>
-            <a class="btn" href="marketec/index.html">View Product</a>
+    <p>
+        Convert common code snippets, variable declarations, and logic blocks
+        between VB.NET and C# instantly in your browser.
+    </p>
+
+    <!-- Controls -->
+    <div class="controls">
+
+        <select id="direction">
+            <option value="vb-to-cs">VB.NET ➔ C#</option>
+            <option value="cs-to-vb">C# ➔ VB.NET</option>
+        </select>
+
+        <button type="button" onclick="convertCode()">
+            Convert Code
+        </button>
+
+    </div>
+
+    <!-- Converter -->
+    <div class="converter-grid">
+
+        <!-- Input -->
+        <div>
+
+            <label style="font-weight:600; display:block; margin-bottom:6px;">
+                Input Code:
+            </label>
+
+            <textarea
+                id="inputCode"
+                placeholder="Paste your VB.NET or C# code snippet here..."
+            ></textarea>
+
         </div>
 
-        <div class="card">
-            <h4>VB.NET to C# Converter</h4>
-            <p>Free client-side code conversion utility for developers.</p>
-            <a class="btn" href="tools/vb-to-csharp/index.html">Use Converter</a>
+        <!-- Output -->
+        <div>
+
+            <div class="code-header">
+
+                <label>
+                    Output Code:
+                </label>
+
+                <button
+                    type="button"
+                    class="copy-button"
+                    onclick="copyOutputCode()"
+                    title="Copy converted code"
+                >
+                    📋 Copy
+                </button>
+
+            </div>
+
+            <textarea
+                id="outputCode"
+                readonly
+                placeholder="Converted output will appear here..."
+            ></textarea>
+
         </div>
-    </section>
-</main>
 
-<footer>
-    &copy; <span id="year"></span> Computologic. All rights reserved.
+    </div>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
-</footer>
+    <!-- Information -->
+    <div class="info-section">
+
+        <h2>How This Client-Side Converter Works</h2>
+
+        <p>
+            This developer utility parses syntax patterns locally within your
+            browser using JavaScript. Because no code is transmitted to an
+            external server, your proprietary database queries and logic
+            remain completely private.
+        </p>
+
+        <h3>Key Supported Transformations:</h3>
+
+        <ul>
+            <li>
+                Data type conversions
+                (e.g., <code>Integer</code> ↔ <code>int</code>,
+                <code>String</code> ↔ <code>string</code>,
+                <code>Boolean</code> ↔ <code>bool</code>)
+            </li>
+
+            <li>
+                Variable declarations
+                (e.g., <code>Dim x As String</code> ↔
+                <code>string x;</code>)
+            </li>
+
+            <li>
+                Method and function definitions
+                (e.g., <code>Sub</code> / <code>Function</code> ↔
+                <code>void</code> / typed methods)
+            </li>
+
+            <li>
+                Comment syntax
+                (<code>'</code> ↔ <code>//</code>)
+            </li>
+
+            <li>
+                Conditionals and equality operators
+                (<code>If ... Then</code> ↔ <code>if (...)</code>,
+                <code>IsNot</code> ↔ <code>!=</code>)
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+
+<script>
+
+function convertCode() {
+
+    const direction = document.getElementById('direction').value;
+    const input = document.getElementById('inputCode').value;
+
+    let output = "";
+
+    if (direction === "vb-to-cs") {
+        output = convertVbToCs(input);
+    }
+    else {
+        output = convertCsToVb(input);
+    }
+
+    document.getElementById('outputCode').value = output;
+}
+
+
+/* ==========================================
+   VB.NET → C#
+   ========================================== */
+
+function convertVbToCs(vb) {
+
+    let cs = vb;
+
+    // Comments
+    cs = cs.replace(/^(\s*)'/gm, '$1//');
+
+    // Basic Data Types
+    cs = cs.replace(/\bAs\s+Integer\b/gi, 'int')
+           .replace(/\bAs\s+String\b/gi, 'string')
+           .replace(/\bAs\s+Boolean\b/gi, 'bool')
+           .replace(/\bAs\s+Double\b/gi, 'double')
+           .replace(/\bAs\s+Object\b/gi, 'object');
+
+    // Variable Declarations
+    cs = cs.replace(
+        /\bDim\s+([a-zA-Z0-9_]+)\s+([a-zA-Z0-9_<>\b]+)/gi,
+        '$2 $1;'
+    );
+
+    // Sub / Function Endings
+    cs = cs.replace(/\bEnd\s+Sub\b/gi, '}')
+           .replace(/\bEnd\s+Function\b/gi, '}')
+           .replace(/\bEnd\s+If\b/gi, '}')
+           .replace(/\bEnd\s+While\b/gi, '}');
+
+    // Subs & Functions
+    cs = cs.replace(
+        /\bPublic\s+Sub\s+([a-zA-Z0-9_]+)\((.*?)\)/gi,
+        'public void $1($2) {'
+    )
+    .replace(
+        /\bPrivate\s+Sub\s+([a-zA-Z0-9_]+)\((.*?)\)/gi,
+        'private void $1($2) {'
+    )
+    .replace(
+        /\bPublic\s+Function\s+([a-zA-Z0-9_]+)\((.*?)\)\s+([a-zA-Z0-9_]+)/gi,
+        'public $3 $1($2) {'
+    )
+    .replace(
+        /\bPrivate\s+Function\s+([a-zA-Z0-9_]+)\((.*?)\)\s+([a-zA-Z0-9_]+)/gi,
+        'private $3 $1($2) {'
+    );
+
+    // Logic & Operators
+    cs = cs.replace(/\bIsNot\b/gi, '!=')
+           .replace(/\bIs\b/gi, '==')
+           .replace(/\bThen\b/gi, '{')
+           .replace(/\bIf\s+(.*?)\s+\{/gi, 'if ($1) {');
+
+    // Booleans & Nothing
+    cs = cs.replace(/\bTrue\b/g, 'true')
+           .replace(/\bFalse\b/g, 'false')
+           .replace(/\bNothing\b/g, 'null');
+
+    return cs;
+}
+
+
+/* ==========================================
+   C# → VB.NET
+   ========================================== */
+
+function convertCsToVb(cs) {
+
+    let vb = cs;
+
+    // Comments
+    vb = vb.replace(/^(\s*)\/\//gm, "$1'");
+
+    // Data Types & Declarations
+    vb = vb.replace(
+        /\bint\s+([a-zA-Z0-9_]+);/gi,
+        'Dim $1 As Integer'
+    )
+    .replace(
+        /\bstring\s+([a-zA-Z0-9_]+);/gi,
+        'Dim $1 As String'
+    )
+    .replace(
+        /\bbool\s+([a-zA-Z0-9_]+);/gi,
+        'Dim $1 As Boolean'
+    )
+    .replace(
+        /\bdouble\s+([a-zA-Z0-9_]+);/gi,
+        'Dim $1 As Double'
+    );
+
+    // Methods
+    vb = vb.replace(
+        /\bpublic\s+void\s+([a-zA-Z0-9_]+)\((.*?)\)\s*\{/gi,
+        'Public Sub $1($2)'
+    )
+    .replace(
+        /\bprivate\s+void\s+([a-zA-Z0-9_]+)\((.*?)\)\s*\{/gi,
+        'Private Sub $1($2)'
+    );
+
+    // Booleans & Null
+    vb = vb.replace(/\btrue\b/g, 'True')
+           .replace(/\bfalse\b/g, 'False')
+           .replace(/\bnull\b/g, 'Nothing');
+
+    // Closing Braces
+    vb = vb.replace(/\}/g, 'End Sub');
+
+    return vb;
+}
+
+
+/* ==========================================
+   COPY OUTPUT CODE
+   ========================================== */
+
+function copyOutputCode() {
+
+    const output = document.getElementById("outputCode");
+    const copyButton = document.querySelector(".copy-button");
+
+    // Nothing to copy
+    if (!output.value) {
+        return;
+    }
+
+    // Modern browsers
+    if (navigator.clipboard && window.isSecureContext) {
+
+        navigator.clipboard.writeText(output.value)
+            .then(function () {
+
+                copyButton.textContent = "✓ Copied!";
+
+                setTimeout(function () {
+                    copyButton.textContent = "📋 Copy";
+                }, 1500);
+
+            })
+            .catch(function () {
+                fallbackCopy(output, copyButton);
+            });
+
+    }
+    else {
+
+        // Fallback
+        fallbackCopy(output, copyButton);
+
+    }
+}
+
+
+/* ==========================================
+   COPY FALLBACK
+   ========================================== */
+
+function fallbackCopy(output, copyButton) {
+
+    output.focus();
+    output.select();
+    output.setSelectionRange(0, output.value.length);
+
+    try {
+
+        document.execCommand("copy");
+
+        copyButton.textContent = "✓ Copied!";
+
+        setTimeout(function () {
+            copyButton.textContent = "📋 Copy";
+        }, 1500);
+
+    }
+    catch (err) {
+
+        copyButton.textContent = "Copy Failed";
+
+        setTimeout(function () {
+            copyButton.textContent = "📋 Copy";
+        }, 1500);
+
+    }
+}
+
+</script>
 
 </body>
 </html>
